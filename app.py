@@ -79,6 +79,48 @@ def validate_json_data(data):
 # ROUTES
 # ============================================================================
 
+# Welcome route - GET /
+@app.route("/", methods=["GET"])
+def welcome():
+    """
+    Welcome route that returns a JSON message.
+    
+    This endpoint serves as the root of the API and provides a simple
+    JSON response to confirm the API is running.
+    
+    Returns:
+        A JSON object with a welcome message and status code 200
+    """
+    return jsonify({
+        "message": "Welcome to the Events API",
+        "description": "A simple CRUD API for managing events",
+        "endpoints": {
+            "GET /": "Welcome message",
+            "GET /events": "List all events",
+            "POST /events": "Create a new event",
+            "PATCH /events/<id>": "Update an event",
+            "DELETE /events/<id>": "Delete an event"
+        }
+    }), 200
+
+# GET route to list all events
+@app.route("/events", methods=["GET"])
+def get_events():
+    """
+    Returns a list of all events.
+    
+    This endpoint retrieves all events from the in-memory data store
+    and returns them as a JSON array.
+    
+    Returns:
+        A JSON array of event objects with status code 200
+    """
+    # Convert all events to dictionaries
+    events_list = [event.to_dict() for event in events]
+    
+    # Return the list of events
+    return jsonify(events_list), 200
+
 # POST route to create a new event
 @app.route("/events", methods=["POST"])
 def create_event():
